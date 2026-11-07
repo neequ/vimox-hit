@@ -1,0 +1,75 @@
+name: Release CLI
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: windows
+            goarch: amd64
+            runner: windows-latest
+          - goos: windows
+            goarch: arm64
+            runner: windows-latest
+          - goos: darwin
+            goarch: amd64
+            runner: macos-latest
+          - goos: darwin
+            goarch: arm64
+            runner: macos-latest
+          - goos: linux
+            goarch: amd64
+            runner: ubuntu-latest
+          - goos: linux
+            goarch: arm64
+            runner: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25.x"
+      - name: Test
+        run: go test ./...
+      - name: Build release archive
+        shell: bash
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          suffix=""
+          if [[ "$GOOS" == "windows" ]]; then suffix=".exe"; fi
+          name="vimox-hit_${TAG}_${GOOS}_${GOARCH}"
+          mkdir -p dist
+          CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.cliVersion=${TAG#v}" -o "dist/${name}${suffix}" ./cmd/vimox-hit
+          if [[ "$GOOS" == "windows" ]]; then (cd dist && 7z a "${name}.zip" "${name}${suffix}"); else tar -C dist -czf "dist/${name}.tar.gz" "${name}${suffix}"; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vimox-hit-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/vimox-hit_*
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+      - name: Checksums
+        run: cd release-assets && sha256sum vimox-hit_* > SHA256SUMS
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*
+          generate_release_notes: true
