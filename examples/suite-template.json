@@ -1,0 +1,12 @@
+{
+  "name": "商品柔光套图",
+  "category": { "l1": "商品展示", "l2": "通用", "leaf": "商品" },
+  "styleLock": { "lockText": "白底柔光，保持商品真实外观" },
+  "shots": [{
+    "shotId": "hero",
+    "order": 1,
+    "shotRole": "HERO",
+    "displayName": "商品主图",
+    "promptTemplate": "在白底柔光中展示 {product}，突出商品真实材质与轮廓。"
+  }]
+}

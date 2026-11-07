@@ -12,7 +12,7 @@ if (-not (Get-Command vimox-hit -ErrorAction SilentlyContinue) -and (Test-Path (
   $env:Path = "$installDir;$env:Path"
 }
 if (-not (Get-Command vimox-hit -ErrorAction SilentlyContinue)) {
-  irm https://raw.githubusercontent.com/neequ/vimox-hit/main/install.ps1 | iex
+  irm https://raw.githubusercontent.com/neequ/vimox-hit/master/install.ps1 | iex
 }
 $env:Path = "$installDir;$env:Path"
 vimox-hit version
@@ -22,10 +22,20 @@ macOS / Linux：
 
 ```sh
 if ! command -v vimox-hit >/dev/null 2>&1; then
-  curl -fsSL https://raw.githubusercontent.com/neequ/vimox-hit/main/install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/neequ/vimox-hit/master/install.sh | sh
 fi
 export PATH="$HOME/.local/bin:$PATH"
 vimox-hit version
+```
+
+选择来源前查询 `https://api.country.is/` 的公网 IP 国家代码。结果为 `CN` 时优先使用 `gh-proxy.com` GitHub 代理；其他地区使用上方官方命令。检测或镜像失败时回退官方源。安装程序仍校验 `SHA256SUMS`；查询服务会收到公网 IP，Vimox Hit 不保存该信息。
+
+```powershell
+$env:VIMOX_HIT_GITHUB_MIRROR='gh-proxy.com'; try { irm 'https://hit.vimox.cn/downloads/cli/install.ps1' | iex } finally { Remove-Item Env:VIMOX_HIT_GITHUB_MIRROR -ErrorAction SilentlyContinue }
+```
+
+```sh
+curl -fsSL 'https://hit.vimox.cn/downloads/cli/install.sh' | VIMOX_HIT_GITHUB_MIRROR=gh-proxy.com sh
 ```
 
 随后运行 `vimox-hit doctor` 并检查 `data.authenticated`。如果为 `false`，立即停止并说明 Hit 目前尚未提供 CLI OAuth 授权；不得读取浏览器存储、索取从浏览器存储复制的令牌或继续运行项目命令。用户仍可在 Hit 网页端查看项目。

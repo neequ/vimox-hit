@@ -1,0 +1,22 @@
+{
+  "sourceKey": "cli:product-demo:1",
+  "name": "商品展示模板",
+  "description": "可直接上传的最小视频模板，不调用模型。",
+  "category": "按摩养生",
+  "tags": ["商品展示"],
+  "payload": {
+    "campaignStyleLock": "自然柔光，主体清晰",
+    "videoAspectRatio": "9:16",
+    "videoResolution": "720p",
+    "slots": [],
+    "shots": [{
+      "assetType": "hero-image",
+      "displayName": "商品主镜头",
+      "promptInstruction": "商品摆放在干净台面，柔光突出材质和轮廓。",
+      "videoPrompt": "镜头缓缓推近商品，保持主体外观一致，自然柔光。",
+      "durationSec": 6,
+      "videoAspectRatio": "9:16",
+      "videoResolution": "720p"
+    }]
+  }
+}

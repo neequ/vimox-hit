@@ -52,8 +52,10 @@ func run(args []string) error {
 		return aiLog(args[1:])
 	case "doctor":
 		return doctor()
+	case "template":
+		return templateCommand(args[1:])
 	default:
-		return errors.New("用法: vimox-hit context show --project ID | project init --name NAME | ai-log list|show|diagnose|copy")
+		return errors.New("用法: vimox-hit context show --project ID | project init --name NAME | ai-log list|show|diagnose|copy | template list|upload|publish|stats")
 	}
 }
 
@@ -171,6 +173,10 @@ func getJSON(path string, query url.Values) error {
 }
 
 func requestJSON(path string, query url.Values) (any, error) {
+	return requestAPI(http.MethodGet, path, query, nil, "", 30*time.Second)
+}
+
+func requestAPI(method, path string, query url.Values, body io.Reader, contentType string, timeout time.Duration) (any, error) {
 	token := os.Getenv("VIMOX_HIT_TOKEN")
 	if token == "" {
 		return nil, errors.New("尚未配置 VIMOX_HIT_TOKEN；Hit 目前尚未提供 CLI OAuth 授权流程，请暂时在网页端查看项目数据。不要从浏览器存储复制访问令牌")
@@ -179,18 +185,27 @@ func requestJSON(path string, query url.Values) (any, error) {
 	if len(query) > 0 {
 		endpoint += "?" + query.Encode()
 	}
-	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
+	request, err := http.NewRequest(method, endpoint, body)
 	if err != nil {
 		return nil, err
 	}
 	request.Header.Set("Authorization", "Bearer "+token)
 	request.Header.Set("Accept", "application/json")
-	response, err := (&http.Client{Timeout: 30 * time.Second}).Do(request)
+	if contentType != "" {
+		request.Header.Set("Content-Type", contentType)
+	}
+	response, err := (&http.Client{Timeout: timeout}).Do(request)
 	if err != nil {
 		return nil, fmt.Errorf("Hit API 请求失败: %w", err)
 	}
 	defer response.Body.Close()
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		var failure struct {
+			Error apiError `json:"error"`
+		}
+		if json.NewDecoder(io.LimitReader(response.Body, 64<<10)).Decode(&failure) == nil && failure.Error.Message != "" {
+			return nil, fmt.Errorf("Hit API 返回 HTTP %d: %s", response.StatusCode, failure.Error.Message)
+		}
 		return nil, fmt.Errorf("Hit API 返回 HTTP %d", response.StatusCode)
 	}
 	var value any
