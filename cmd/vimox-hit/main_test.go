@@ -5,6 +5,15 @@ import (
 	"testing"
 )
 
+func TestRequestJSONExplainsMissingCliAuthorization(t *testing.T) {
+	t.Setenv("VIMOX_HIT_TOKEN", "")
+
+	_, err := requestJSON("/projects/example", nil)
+	if err == nil || !strings.Contains(err.Error(), "尚未提供 CLI OAuth 授权流程") {
+		t.Fatalf("requestJSON() error = %v, want missing CLI authorization guidance", err)
+	}
+}
+
 func TestFlagValue(t *testing.T) {
 	if got := flagValue([]string{"--name", "campaign"}, "--name"); got != "campaign" {
 		t.Fatalf("flagValue() = %q", got)

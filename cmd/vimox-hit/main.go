@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var cliVersion = "0.2.0"
+var cliVersion = "0.2.2"
 
 type envelope struct {
 	SchemaVersion string `json:"schemaVersion"`
@@ -173,7 +173,7 @@ func getJSON(path string, query url.Values) error {
 func requestJSON(path string, query url.Values) (any, error) {
 	token := os.Getenv("VIMOX_HIT_TOKEN")
 	if token == "" {
-		return nil, errors.New("尚未登录：请在 hit.vimox.cn 的 CLI 安装页完成授权并设置 VIMOX_HIT_TOKEN")
+		return nil, errors.New("尚未配置 VIMOX_HIT_TOKEN；Hit 目前尚未提供 CLI OAuth 授权流程，请暂时在网页端查看项目数据。不要从浏览器存储复制访问令牌")
 	}
 	endpoint := apiBaseURL() + path
 	if len(query) > 0 {

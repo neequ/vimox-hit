@@ -19,6 +19,7 @@ try {
   Move-Item -Force (Join-Path $temp 'vimox-hit.exe') (Join-Path $install 'vimox-hit.exe')
   $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
   if (($userPath -split ';') -notcontains $install) { [Environment]::SetEnvironmentVariable('Path', (($userPath.TrimEnd(';') + ';' + $install).Trim(';')), 'User') }
+  if (($env:Path -split ';') -notcontains $install) { $env:Path = "$install;$env:Path" }
   & (Join-Path $install 'vimox-hit.exe') version
   Write-Host "Installed to $install. Open a new terminal to use vimox-hit."
 } finally {

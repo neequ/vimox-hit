@@ -28,6 +28,8 @@ npx skills add neequ/vimox-hit --skill vimox-hit -g
 
 Skill 位于 [`skills/vimox-hit`](skills/vimox-hit)。默认说明使用英文；完整简体中文译文位于 [`references/zh-CN`](skills/vimox-hit/references/zh-CN)。
 
+Skill 首次使用时会检查 CLI，缺失则自动安装并校验最新发行版。读取账户数据需要 `VIMOX_HIT_TOKEN`；Hit 目前尚未提供 CLI OAuth 授权，因此该流程开放前无法通过 CLI 读取项目和 AI 日志，请暂时使用网页端查看。
+
 ## 命令
 
 ```text

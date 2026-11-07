@@ -14,4 +14,6 @@ curl -fsSL https://raw.githubusercontent.com/neequ/vimox-hit/main/install.sh | s
 
 安装程序会从 GitHub Releases 下载当前平台的构建，并使用 `SHA256SUMS` 校验。使用 Agent 支持的 GitHub Skill 安装工具，从 `skills/vimox-hit` 安装本 Skill。
 
+Skill 首次运行时会检查 `vimox-hit`，缺失时自动安装 CLI，然后运行 `vimox-hit doctor`。项目和 AI 日志命令需要 `VIMOX_HIT_TOKEN`；Hit 目前尚未提供 CLI OAuth 授权流程，因此 doctor 返回 `authenticated: false` 时 Skill 会停止。不要从浏览器存储复制访问令牌。
+
 [English](../install.md)

@@ -5,9 +5,37 @@ description: Use the Vimox Hit CLI to inspect video projects, diagnose AI reques
 
 # Vimox Hit
 
-Use `vimox-hit` to read Hit project context and AI request logs. Follow [the installation guide](references/install.md) before first use. Install only official, checksum-verified releases.
+Use `vimox-hit` to read Hit project context and AI request logs. Before the first CLI command, check whether `vimox-hit` is installed. If it is missing, install the latest official release with the platform installer below; the installer verifies the release checksum.
 
-Start with `vimox-hit doctor`, then use the project ID provided by the user:
+On Windows PowerShell:
+
+```powershell
+$installDir = Join-Path $env:LOCALAPPDATA 'Vimox\bin'
+if (-not (Get-Command vimox-hit -ErrorAction SilentlyContinue) -and (Test-Path (Join-Path $installDir 'vimox-hit.exe'))) {
+  $env:Path = "$installDir;$env:Path"
+}
+if (-not (Get-Command vimox-hit -ErrorAction SilentlyContinue)) {
+  irm https://raw.githubusercontent.com/neequ/vimox-hit/main/install.ps1 | iex
+}
+$env:Path = "$installDir;$env:Path"
+vimox-hit version
+```
+
+On macOS or Linux:
+
+```sh
+if ! command -v vimox-hit >/dev/null 2>&1; then
+  curl -fsSL https://raw.githubusercontent.com/neequ/vimox-hit/main/install.sh | sh
+fi
+export PATH="$HOME/.local/bin:$PATH"
+vimox-hit version
+```
+
+Then run `vimox-hit doctor` and inspect `data.authenticated`. If it is `false`, stop and explain that Hit does not yet provide CLI OAuth authorization. Do not read browser storage, request tokens copied from browser storage, or continue with project commands. The user can still inspect the project in the Hit web app.
+
+If an authenticated request returns HTTP 401 or 403, stop and report the authorization failure. Do not retry with a token taken from the browser.
+
+When authenticated, use the project ID provided by the user:
 
 ```text
 vimox-hit context show --project PROJECT_ID

@@ -28,6 +28,8 @@ npx skills add neequ/vimox-hit --skill vimox-hit -g
 
 The Skill is available at [`skills/vimox-hit`](skills/vimox-hit). Its default instructions are in English. Simplified Chinese translations are included under [`references/zh-CN`](skills/vimox-hit/references/zh-CN).
 
+The Skill checks for the CLI on first use and installs the latest checksum-verified release when it is missing. Account commands require `VIMOX_HIT_TOKEN`; Hit does not yet provide CLI OAuth authorization, so project and AI log access stops until that flow is available. Use the web app for account data in the meantime.
+
 ## Commands
 
 ```text
