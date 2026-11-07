@@ -53,7 +53,7 @@ jobs:
           name="vimox-hit_${TAG}_${GOOS}_${GOARCH}"
           mkdir -p dist
           CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.cliVersion=${TAG#v}" -o "dist/${name}${suffix}" ./cmd/vimox-hit
-          if [[ "$GOOS" == "windows" ]]; then (cd dist && 7z a "${name}.zip" "${name}${suffix}"); else tar -C dist -czf "dist/${name}.tar.gz" "${name}${suffix}"; fi
+          if [[ "$GOOS" == "windows" ]]; then cp "dist/${name}${suffix}" dist/vimox-hit.exe; (cd dist && 7z a "${name}.zip" vimox-hit.exe); else tar -C dist -czf "dist/${name}.tar.gz" "${name}${suffix}"; fi
       - uses: actions/upload-artifact@v4
         with:
           name: vimox-hit-${{ matrix.goos }}-${{ matrix.goarch }}
