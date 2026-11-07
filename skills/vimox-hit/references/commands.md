@@ -1,4 +1,4 @@
-# CLI 命令
+# CLI Commands
 
 ```text
 vimox-hit version
@@ -11,4 +11,6 @@ vimox-hit ai-log diagnose LOG_ID
 vimox-hit ai-log copy LOG_ID
 ```
 
-命令默认输出版本化 JSON。认证通过 `VIMOX_HIT_TOKEN` 环境变量提供；不要把 token 放进命令参数、Skill、项目 manifest 或诊断包。生产登录交互和设备授权会在服务端授权协议落地后补齐。
+Commands emit a versioned JSON envelope. Provide authentication through the `VIMOX_HIT_TOKEN` environment variable. Never put tokens in command arguments, Skill files, project manifests, or diagnostic bundles. Interactive account authorization will be added after the service authorization flow is available.
+
+See the [Simplified Chinese command reference](zh-CN/commands.md).

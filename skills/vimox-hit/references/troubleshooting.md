@@ -1,5 +1,7 @@
-# 故障恢复
+# Troubleshooting
 
-先运行 `vimox-hit doctor` 检查 API 连通性，再用 `vimox-hit ai-log list` 找到对应请求。`show` 返回当前账号可见的请求详情；`diagnose` 输出脱敏结构，`copy` 将相同结构复制到剪贴板。令牌和签名查询参数会被移除。
+Run `vimox-hit doctor` to check API connectivity, then use `vimox-hit ai-log list` to locate the request. `show` reads details visible to the current account; `diagnose` creates a redacted diagnostic bundle; `copy` places the same bundle on the clipboard. Credentials and signed URL query parameters are removed.
 
-只对只读查询做有限重试。任务重复提交、付费模型调用和视频生成必须先查询服务端状态；任何模型调用与最终视频生成都要求用户明确批准。模型或费用策略变化后重新申请审批。
+Retry read-only queries a limited number of times. Before retrying a task, check its server-side state. Every model operation and final video generation requires explicit user approval. Request new approval after a retry or any change to the model, inputs, parameters, or estimated cost.
+
+See the [Simplified Chinese troubleshooting guide](zh-CN/troubleshooting.md).

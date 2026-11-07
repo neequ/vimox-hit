@@ -1,4 +1,4 @@
 interface:
   display_name: "Vimox Hit"
-  short_description: "操作 Hit 项目并诊断 AI 请求"
-  default_prompt: "$vimox-hit 帮我继续 Hit 视频项目，查看相关 AI 请求日志并保存诊断。"
+  short_description: "Inspect Hit projects and diagnose AI requests"
+  default_prompt: "$vimox-hit inspect my Hit video project, review the related AI request logs, and save a diagnostic bundle."

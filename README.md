@@ -1,8 +1,10 @@
-# vimox-hit
+# Vimox Hit CLI
 
-`vimox-hit` is the local, agent-friendly command line client for [hit.vimox.cn](https://hit.vimox.cn). It is distributed as a single Go binary and has no runtime dependencies.
+English | [简体中文](README.zh-CN.md)
 
-## Install
+`vimox-hit` is the local, agent-friendly command line client for [Vimox Hit](https://hit.vimox.cn). It is distributed as a single Go binary and has no runtime dependencies.
+
+## Install the CLI
 
 Windows PowerShell:
 
@@ -16,7 +18,15 @@ macOS / Linux:
 curl -fsSL https://raw.githubusercontent.com/neequ/vimox-hit/main/install.sh | sh
 ```
 
-Install the `vimox-hit` Skill from this repository with the Agent's supported Skill installer. Releases include Windows, macOS and Linux binaries; install scripts verify SHA-256 before installing.
+The installers select the current OS and architecture, download the latest GitHub Release, verify its SHA-256 checksum, and install the binary. See [all releases](https://github.com/neequ/vimox-hit/releases).
+
+## Install the Agent Skill
+
+```sh
+npx skills add neequ/vimox-hit --skill vimox-hit -g
+```
+
+The Skill is available at [`skills/vimox-hit`](skills/vimox-hit). Its default instructions are in English. Simplified Chinese translations are included under [`references/zh-CN`](skills/vimox-hit/references/zh-CN).
 
 ## Commands
 
@@ -31,7 +41,11 @@ vimox-hit ai-log diagnose LOG_ID
 vimox-hit ai-log copy LOG_ID
 ```
 
-Commands emit a versioned JSON envelope. Set `VIMOX_HIT_TOKEN` for authenticated API requests and `VIMOX_HIT_API_URL` only for local development. Never put tokens in command arguments, shell history, project manifests, Skill files or diagnostic bundles.
+Commands emit a versioned JSON envelope. Set `VIMOX_HIT_TOKEN` for authenticated API requests and `VIMOX_HIT_API_URL` only for local development. Never put tokens in command arguments, shell history, project manifests, Skill files, or diagnostic bundles.
+
+## Approval requirements
+
+Every model operation and final video generation must be shown to the user for explicit approval before execution. Approval is short-lived, single-use, and bound to the exact inputs, model, parameters, and cost estimate. A retry or any change to those values requires a new approval. The current CLI does not expose model execution or video generation commands because the service-side approval endpoint is not available yet.
 
 ## Development
 
@@ -40,8 +54,4 @@ go test ./...
 go build ./cmd/vimox-hit
 ```
 
-Tag a release as `vX.Y.Z`; GitHub Actions cross-compiles the supported OS/architecture matrix and publishes checksums.
-
-## Current API coverage
-
-This first public release reads project context and AI request logs, creates local project folders, and produces redacted diagnostic bundles. Upload, analysis and video generation are not exposed until the service supports the required user approval protocol for every model operation and final video generation.
+Push a `vX.Y.Z` tag to build and publish Windows, macOS, and Linux releases for amd64 and arm64. GitHub Actions attaches SHA-256 checksums to each release.

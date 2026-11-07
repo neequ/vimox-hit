@@ -1,3 +1,5 @@
 # Project Folder
 
-`vimox-hit project init` 在 `VIMOX_HIT_PROJECTS_DIR` 或用户目录下的 `VimoxProjects` 创建目录，包含 `input/`、`analysis/`、`materials/`、`output/`、`metadata/`、`logs/` 与 `project.json`。清单只保存相对路径和 UTC 时间；不会自动复制、覆盖用户媒体。
+`vimox-hit project init` creates a directory under `VIMOX_HIT_PROJECTS_DIR`, or under `VimoxProjects` in the user's home directory when that variable is unset. The folder contains `input/`, `analysis/`, `materials/`, `output/`, `metadata/`, `logs/`, and `project.json`.
+
+The manifest stores relative paths and UTC timestamps only. Initialization does not copy, move, or overwrite user media. See the [Simplified Chinese project folder guide](zh-CN/project-format.md).
